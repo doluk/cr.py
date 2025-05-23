@@ -1,0 +1,9 @@
+[project]
+name = "cr.py"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "aiohttp>=3.11.18",
+    "orjson>=3.10.18",
+]
