@@ -25,7 +25,7 @@ import typing
 
 
 from .players import ClanMember
-from .miscmodels import try_enum, ChatLanguage, Location, Label, BaseLeague, CapitalDistrict
+from .miscmodels import try_enum, ChatLanguage, Location, Label, BaseArena, CapitalDistrict
 from .utils import get, cached_property, correct_tag
 from .abc import BaseClan
 
@@ -222,8 +222,8 @@ class Clan(BaseClan):
         self.war_losses: int = data_get("warLosses", -1)
         self.public_war_log: bool = data_get("isWarLogPublic")
         self.description: str = data_get("description")
-        self.war_league = try_enum(BaseLeague, data=data_get("warLeague"))
-        self.capital_league = try_enum(BaseLeague, data=data_get("capitalLeague"))
+        self.war_league = try_enum(BaseArena, data=data_get("warLeague"))
+        self.capital_league = try_enum(BaseArena, data=data_get("capitalLeague"))
         self.chat_language = try_enum(ChatLanguage, data=data_get("chatLanguage"))
         self.required_townhall = data_get("requiredTownhallLevel")
 

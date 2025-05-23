@@ -62,38 +62,6 @@ class BaseClan:
         # pylint: disable=missing-function-docstring
         return NotImplemented
 
-    def get_detailed_members(self, cls: Type["Player"] = None,
-                             load_game_data: bool = None) -> NotImplemented | PlayerIterator:
-        """Get detailed player information for every player in the clan.
-
-        This returns a :class:`PlayerIterator` which fetches all player
-        tags in the clan in parallel.
-
-        Example
-        ---------
-
-        .. code-block:: python3
-
-            clan = await client.get_clan(clan_tag)
-
-            async for player in clan.get_detailed_members():
-                print(player.name)
-
-
-        Yields
-        ------
-        :class:`Player`
-            A full player object of a clan member.
-        """
-        if self.members is NotImplemented:
-            return NotImplemented
-
-        return PlayerIterator(self._client,
-                              (p.tag for p in self.members),
-                              cls=cls,
-                              load_game_data=load_game_data,
-                              members=self.members_dict)
-
 
 class BasePlayer:
     """An ABC that implements some common operations on players, regardless of type.

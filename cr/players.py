@@ -22,10 +22,6 @@ from .player_clan import PlayerClan, PlayerClan as RankedClan
 from .utils import cached_property
 
 
-if TYPE_CHECKING:
-    # pylint: disable=cyclic-import
-    from .clans import Clan  # noqa
-
 
 class ClanMember(BasePlayer):
     """Represents a Clash of Clans Clan Member.
@@ -282,7 +278,7 @@ class Player(BasePlayer):
         self.card_cls = Card
         self.support_card_cls = SupportCard
         self.arena_cls = Arena
-        self.clan_cls = Clan
+        self.clan_cls = client.objects_cls['Clan']
         self.season_result_cls = SeasonResult
         self.role_cls = Role
         self.league_statistics_cls = LeagueStatistics
@@ -293,7 +289,7 @@ class Player(BasePlayer):
     def _from_data(self, data: dict) -> None:
         data_get = data.get
         # initialize all attributes
-        self.clan: Optional[Clan] = try_enum(self.clan_cls, data=data_get("clan"), client=self._client)
+        self.clan = try_enum(self.clan_cls, data=data_get("clan"), client=self._client)
         self._support_cards: List[SupportCard] = [
             try_enum(self.support_card_cls, data=adata, client=self._client) for adata in data_get("supportCards", [])]
         self.current_favorite_card: Optional[Card] = try_enum(self.card_cls, data=data_get("currentFavouriteCard"), client=self._client)

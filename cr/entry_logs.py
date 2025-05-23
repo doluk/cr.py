@@ -5,8 +5,6 @@ import asyncio
 from abc import ABC, abstractmethod
 from typing import Optional, TYPE_CHECKING, Type, Union
 
-from .raid import RaidLogEntry
-from .wars import ClanWarLogEntry
 
 if TYPE_CHECKING:
     from .client import Client
@@ -19,7 +17,7 @@ class LogPaginator(ABC):
                  limit: int,
                  page: bool,
                  json_resp: dict,
-                 model: Union[Type[ClanWarLogEntry], Type[RaidLogEntry]],
+                 model,
                  **kwargs):
 
         self._clan_tag = clan_tag
@@ -45,7 +43,7 @@ class LogPaginator(ABC):
         self._sync_index = 0
         return self
 
-    def __next__(self) -> Union[ClanWarLogEntry, RaidLogEntry]:
+    def __next__(self):
         """Fetch the next item in the iter object and return the entry"""
         if self._sync_index == len(self._init_logs):
             raise StopIteration
@@ -54,7 +52,7 @@ class LogPaginator(ABC):
         self._sync_index += 1
         return ret
 
-    def __getitem__(self, index: int) -> Union[ClanWarLogEntry, RaidLogEntry]:
+    def __getitem__(self, index: int):
         """Support indexing the object. This will not fetch any addition
         items from the endpoint"""
         try:
@@ -75,7 +73,7 @@ class LogPaginator(ABC):
         self._page_data = self._init_data.copy()
         return self
 
-    async def __anext__(self) -> Union[ClanWarLogEntry, RaidLogEntry]:
+    async def __anext__(self):
         """
         This class supports async for loops. If the `page` bool is set to
         True then the async for loop will fetch all items from the endpoint
@@ -104,7 +102,7 @@ class LogPaginator(ABC):
 
         # If paging is enabled, update self._war_logs if the end of the
         # array is reached
-        ret: Union[ClanWarLogEntry, RaidLogEntry]
+        #ret: Union[ClanWarLogEntry, RaidLogEntry]
 
         # If index request is within range of the war_logs, return item
         if self._min_index <= self._async_index < self._max_index:
@@ -164,7 +162,7 @@ class LogPaginator(ABC):
     async def init_cls(cls,
                        client: Client,
                        clan_tag: str,
-                       model: Type[ClanWarLogEntry],
+                       model,
                        limit: int,
                        paginate: bool = True,
                        **kwargs,
@@ -183,7 +181,7 @@ class ClanWarLog(LogPaginator, ABC):
     async def init_cls(cls,
                        client: Client,
                        clan_tag: str,
-                       model: Type[ClanWarLogEntry],
+                       model,
                        limit: int,
                        page: bool = True,
                        after: str = None,
@@ -224,7 +222,7 @@ class RaidLog(LogPaginator, ABC):
     async def init_cls(cls,
                        client: Client,
                        clan_tag: str,
-                       model: Type[RaidLogEntry],
+                       model,
                        limit: int,
                        page: bool = True,
                        after: str = None,
